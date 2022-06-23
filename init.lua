@@ -45,6 +45,13 @@ return packer.startup(function(use)
 	use "p00f/alabaster_dark.nvim"
 	use "tpope/vim-surround"
 	use "nvim-treesitter/nvim-treesitter"
+	use 'Olical/conjure'
+	use 'clojure-vim/vim-jack-in'
+	use 'tpope/vim-dispatch'
+	use 'radenling/vim-dispatch-neovim'
+	use 'guns/vim-sexp'
+	use 'tpope/vim-sexp-mappings-for-regular-people'
+
 	use {
 		'numToStr/Comment.nvim',
 		config = function()
@@ -90,21 +97,21 @@ return packer.startup(function(use)
 			require("which-key").setup {}
 		end
 	}
+
 	local wk = require("which-key")
-
-
 	wk.register({
 		["<leader>"] = {
 			f = {
-				name = "+file",
-				f = { "<cmd>Telescope find_files<cr>", "Find File" },
-				b = { "<cmd>Telescope buffers<cr>", "Buffers" },
-				m = { "<cmd>Telescope marks<cr>", "Marks" },
+				name = "+find",
+				f = { "<cmd>Telescope find_files<cr>", "File" },
+				b = { "<cmd>Telescope buffers<cr>", "Buffer" },
+				m = { "<cmd>Telescope marks<cr>", "Mark" },
 				h = { "<cmd>Telescope help_tags<cr>", "Help" },
 				g = { "<cmd>Telescope live_grep<cr>", "Grep" },
-				w = { "<cmd>Telescope grep_string<cr>", "Find word" }
+				w = { "<cmd>Telescope grep_string<cr>", "Word" }
 			},
-			t = { "<cmd>NeoTreeFocus<cr>", "Focus tree" }
+			t = { "<cmd>NeoTreeFocus<cr>", "Focus tree" },
+			T = { "<cmd>NeoTreeShowToggle<cr>", "Toggle tree" }
 		},
 		["<localleader>"] = {
 			name = "+lsp",
@@ -136,10 +143,8 @@ return packer.startup(function(use)
 	lsp.preset('recommended')
 	lsp.setup()
 
-	--
 	-- Put this at the end after all plugins
 	if PACKER_BOOTSTRAP then
 		require("packer").sync()
 	end
 end)
--- Packer
