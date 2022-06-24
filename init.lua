@@ -49,16 +49,16 @@ packer.startup(function(use)
 	use "nvim-treesitter/nvim-treesitter"
 	use "lewis6991/impatient.nvim"
 	use {
-	  "p00f/nvim-ts-rainbow",
-	  config = function ()
-	    require("nvim-treesitter.configs").setup {
-	      rainbow ={
-		enable = true,
-		extended_mode = true,
-		max_file_lines = nil
-	      }
-	    }
-	  end
+		"p00f/nvim-ts-rainbow",
+		config = function()
+			require("nvim-treesitter.configs").setup {
+				rainbow = {
+					enable = true,
+					extended_mode = true,
+					max_file_lines = nil
+				}
+			}
+		end
 	}
 
 	-- Keymapping
@@ -111,6 +111,7 @@ packer.startup(function(use)
 		end
 	}
 
+	-- LSP
 	use {
 		"VonHeikemen/lsp-zero.nvim",
 		requires = {
@@ -130,6 +131,14 @@ packer.startup(function(use)
 			{ "L3MON4D3/LuaSnip" },
 			{ "rafamadriz/friendly-snippets" },
 		}
+	}
+
+	use {
+		"folke/trouble.nvim",
+		requires = "kyazdani42/nvim-web-devicons",
+		config = function()
+			require("trouble").setup {}
+		end
 	}
 
 	-- Clojure
@@ -160,7 +169,8 @@ wk.register({
 			m = { "<cmd>Telescope marks<cr>", "Mark" },
 			h = { "<cmd>Telescope help_tags<cr>", "Help" },
 			g = { "<cmd>Telescope live_grep<cr>", "Grep" },
-			w = { "<cmd>Telescope grep_string<cr>", "Word" }
+			w = { "<cmd>Telescope grep_string<cr>", "Word" },
+			e = { "<cmd>Trouble<cr>", "Errors" }
 		},
 		t = { "<cmd>NeoTreeFocus<cr>", "Focus tree" },
 		T = { "<cmd>NeoTreeShowToggle<cr>", "Toggle tree" }
