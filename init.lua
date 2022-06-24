@@ -16,6 +16,8 @@ vim.g.maplocalleader = ","
 vim.g.alabaster_dim_comments = true
 vim.cmd "colorscheme alabaster_dark"
 
+require("impatient")
+
 -- Packer
 local fn = vim.fn
 
@@ -40,28 +42,53 @@ if not status_ok then
 	return
 end
 
-return packer.startup(function(use)
+packer.startup(function(use)
+	-- Setup
 	use "wbthomason/packer.nvim"
 	use "p00f/alabaster_dark.nvim"
-	use "tpope/vim-surround"
 	use "nvim-treesitter/nvim-treesitter"
-	use 'Olical/conjure'
-	use 'clojure-vim/vim-jack-in'
-	use 'tpope/vim-dispatch'
-	use 'radenling/vim-dispatch-neovim'
-	use 'guns/vim-sexp'
-	use 'tpope/vim-sexp-mappings-for-regular-people'
-
+	use "lewis6991/impatient.nvim"
 	use {
-		'numToStr/Comment.nvim',
+	  "p00f/nvim-ts-rainbow",
+	  config = function ()
+	    require("nvim-treesitter.configs").setup {
+	      rainbow ={
+		enable = true,
+		extended_mode = true,
+		max_file_lines = nil
+	      }
+	    }
+	  end
+	}
+
+	-- Keymapping
+	use {
+		"folke/which-key.nvim",
 		config = function()
-			require('Comment').setup()
+			require("which-key").setup {}
+		end
+	}
+
+	-- Editing
+	use "tpope/vim-surround"
+	use {
+		"numToStr/Comment.nvim",
+		config = function()
+			require("Comment").setup()
 		end
 	}
 	use {
-		'nvim-telescope/telescope.nvim',
+		"windwp/nvim-autopairs",
+		config = function()
+			require("nvim-autopairs").setup {}
+		end
+	}
+
+	-- IDE
+	use {
+		"nvim-telescope/telescope.nvim",
 		requires = {
-			'nvim-lua/plenary.nvim'
+			"nvim-lua/plenary.nvim"
 		}
 	}
 
@@ -78,73 +105,68 @@ return packer.startup(function(use)
 	}
 
 	use {
-		"windwp/nvim-autopairs",
-		config = function()
-			require("nvim-autopairs").setup {}
-		end
-	}
-
-	use {
-		'lewis6991/gitsigns.nvim',
+		"lewis6991/gitsigns.nvim",
 		config = function()
 			require("gitsigns").setup {}
 		end
 	}
 
 	use {
-		"folke/which-key.nvim",
-		config = function()
-			require("which-key").setup {}
-		end
-	}
-
-	local wk = require("which-key")
-	wk.register({
-		["<leader>"] = {
-			f = {
-				name = "+find",
-				f = { "<cmd>Telescope find_files<cr>", "File" },
-				b = { "<cmd>Telescope buffers<cr>", "Buffer" },
-				m = { "<cmd>Telescope marks<cr>", "Mark" },
-				h = { "<cmd>Telescope help_tags<cr>", "Help" },
-				g = { "<cmd>Telescope live_grep<cr>", "Grep" },
-				w = { "<cmd>Telescope grep_string<cr>", "Word" }
-			},
-			t = { "<cmd>NeoTreeFocus<cr>", "Focus tree" },
-			T = { "<cmd>NeoTreeShowToggle<cr>", "Toggle tree" }
-		},
-		["<localleader>"] = {
-			name = "+lsp",
-			f = { "<cmd>LspZeroFormat<cr>", "Format" },
-		},
-	})
-
-	use {
-		'VonHeikemen/lsp-zero.nvim',
+		"VonHeikemen/lsp-zero.nvim",
 		requires = {
 			-- LSP Support
-			{ 'neovim/nvim-lspconfig' },
-			{ 'williamboman/nvim-lsp-installer' },
+			{ "neovim/nvim-lspconfig" },
+			{ "williamboman/nvim-lsp-installer" },
 
 			-- Autocompletion
-			{ 'hrsh7th/nvim-cmp' },
-			{ 'hrsh7th/cmp-buffer' },
-			{ 'hrsh7th/cmp-path' },
-			{ 'saadparwaiz1/cmp_luasnip' },
-			{ 'hrsh7th/cmp-nvim-lsp' },
-			{ 'hrsh7th/cmp-nvim-lua' },
+			{ "hrsh7th/nvim-cmp" },
+			{ "hrsh7th/cmp-buffer" },
+			{ "hrsh7th/cmp-path" },
+			{ "saadparwaiz1/cmp_luasnip" },
+			{ "hrsh7th/cmp-nvim-lsp" },
+			{ "hrsh7th/cmp-nvim-lua" },
 
 			-- Snippets
-			{ 'L3MON4D3/LuaSnip' },
-			{ 'rafamadriz/friendly-snippets' },
+			{ "L3MON4D3/LuaSnip" },
+			{ "rafamadriz/friendly-snippets" },
 		}
 	}
-	local lsp = require('lsp-zero')
-	lsp.preset('recommended')
-	lsp.setup()
+
+	-- Clojure
+	use "Olical/conjure"
+	use "clojure-vim/vim-jack-in"
+	use "tpope/vim-dispatch"
+	use "radenling/vim-dispatch-neovim"
+	use "guns/vim-sexp"
+	use "tpope/vim-sexp-mappings-for-regular-people"
 
 	-- Put this at the end after all plugins
 	if PACKER_BOOTSTRAP then
 		require("packer").sync()
 	end
 end)
+
+local lsp = require("lsp-zero")
+lsp.preset("recommended")
+lsp.setup()
+
+local wk = require("which-key")
+wk.register({
+	["<leader>"] = {
+		f = {
+			name = "+find",
+			f = { "<cmd>Telescope find_files<cr>", "File" },
+			b = { "<cmd>Telescope buffers<cr>", "Buffer" },
+			m = { "<cmd>Telescope marks<cr>", "Mark" },
+			h = { "<cmd>Telescope help_tags<cr>", "Help" },
+			g = { "<cmd>Telescope live_grep<cr>", "Grep" },
+			w = { "<cmd>Telescope grep_string<cr>", "Word" }
+		},
+		t = { "<cmd>NeoTreeFocus<cr>", "Focus tree" },
+		T = { "<cmd>NeoTreeShowToggle<cr>", "Toggle tree" }
+	},
+	["<localleader>"] = {
+		name = "+lsp",
+		f = { "<cmd>LspZeroFormat<cr>", "Format" },
+	},
+})
