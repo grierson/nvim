@@ -170,6 +170,15 @@ local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protoco
 require('lspconfig')['sumneko_lua'].setup {
 	capabilities = capabilities
 }
+require('lspconfig')['clojure_lsp'].setup {
+	capabilities = capabilities
+}
+require('lspconfig')['marksman'].setup {
+	capabilities = capabilities
+}
+require('lspconfig')['tflint'].setup {
+	capabilities = capabilities
+}
 
 require("nvim-treesitter.configs").setup {
 	highlight = {
