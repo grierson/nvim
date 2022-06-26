@@ -48,18 +48,7 @@ packer.startup(function(use)
 	use "p00f/alabaster_dark.nvim"
 	use "nvim-treesitter/nvim-treesitter"
 	use "lewis6991/impatient.nvim"
-	use {
-		"p00f/nvim-ts-rainbow",
-		config = function()
-			require("nvim-treesitter.configs").setup {
-				rainbow = {
-					enable = true,
-					extended_mode = true,
-					max_file_lines = nil
-				}
-			}
-		end
-	}
+	use "p00f/nvim-ts-rainbow"
 
 	-- Keymapping
 	use {
@@ -112,34 +101,16 @@ packer.startup(function(use)
 	}
 
 	-- LSP
-	use {
-		"VonHeikemen/lsp-zero.nvim",
-		requires = {
-			-- LSP Support
-			{ "neovim/nvim-lspconfig" },
-			{ "williamboman/nvim-lsp-installer" },
+	use 'neovim/nvim-lspconfig'
+	use 'williamboman/nvim-lsp-installer'
 
-			-- Autocompletion
-			{ "hrsh7th/nvim-cmp" },
-			{ "hrsh7th/cmp-buffer" },
-			{ "hrsh7th/cmp-path" },
-			{ "saadparwaiz1/cmp_luasnip" },
-			{ "hrsh7th/cmp-nvim-lsp" },
-			{ "hrsh7th/cmp-nvim-lua" },
+	use 'hrsh7th/nvim-cmp'
+	use 'hrsh7th/cmp-nvim-lsp'
+	use 'hrsh7th/cmp-buffer'
 
-			-- Snippets
-			{ "L3MON4D3/LuaSnip" },
-			{ "rafamadriz/friendly-snippets" },
-		}
-	}
-
-	use {
-		"folke/trouble.nvim",
-		requires = "kyazdani42/nvim-web-devicons",
-		config = function()
-			require("trouble").setup {}
-		end
-	}
+	use 'saadparwaiz1/cmp_luasnip'
+	use 'L3MON4D3/LuaSnip'
+	use 'stevearc/dressing.nvim'
 
 	-- Clojure
 	use "Olical/conjure"
@@ -155,9 +126,64 @@ packer.startup(function(use)
 	end
 end)
 
-local lsp = require("lsp-zero")
-lsp.preset("recommended")
-lsp.setup()
+local luasnip = require 'luasnip'
+
+local cmp = require 'cmp'
+cmp.setup {
+	snippet = {
+		expand = function(args)
+			luasnip.lsp_expand(args.body)
+		end,
+	},
+	mapping = cmp.mapping.preset.insert({
+		['<CR>'] = cmp.mapping.confirm {
+			behavior = cmp.ConfirmBehavior.Replace,
+			select = true,
+		},
+		['<Tab>'] = cmp.mapping(function(fallback)
+			if cmp.visible() then
+				cmp.select_next_item()
+			elseif luasnip.expand_or_jumpable() then
+				luasnip.expand_or_jump()
+			else
+				fallback()
+			end
+		end, { 'i', 's' }),
+		['<S-Tab>'] = cmp.mapping(function(fallback)
+			if cmp.visible() then
+				cmp.select_prev_item()
+			elseif luasnip.jumpable(-1) then
+				luasnip.jump(-1)
+			else
+				fallback()
+			end
+		end, { 'i', 's' }),
+	}),
+	sources = {
+		{ name = 'nvim_lsp' },
+		{ name = 'luasnip' },
+		{ name = 'buffer' },
+	},
+}
+
+local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+require('lspconfig')['sumneko_lua'].setup {
+	capabilities = capabilities
+}
+
+require("nvim-treesitter.configs").setup {
+	highlight = {
+		enable = true
+	},
+	indent = {
+		enable = true
+	},
+	rainbow = {
+		enable = true,
+		extended_mode = true,
+		max_file_lines = nil
+	}
+}
 
 local wk = require("which-key")
 wk.register({
@@ -173,7 +199,13 @@ wk.register({
 			e = { "<cmd>Trouble<cr>", "Errors" }
 		},
 		t = { "<cmd>NeoTreeFocus<cr>", "Focus tree" },
-		T = { "<cmd>NeoTreeShowToggle<cr>", "Toggle tree" }
+		T = { "<cmd>NeoTreeShowToggle<cr>", "Toggle tree" },
+		l = {
+			name = "+LSP",
+			a = { "<cmd>lua vim.lsp.buf.code_action()<cr>", "Action" },
+			f = { "<cmd>lua vim.lsp.buf.formatting_sync()<cr>", "Format" },
+			r = { "<cmd>lua vim.lsp.buf.rename()<cr>", "Rename" },
+		},
 	},
 	["<localleader>"] = {
 		name = "+lsp",
