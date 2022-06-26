@@ -13,9 +13,6 @@ vim.opt.shiftwidth = 2
 vim.g.mapleader = " "
 vim.g.maplocalleader = ","
 
-vim.g.alabaster_dim_comments = true
-vim.cmd "colorscheme alabaster_dark"
-
 require("impatient")
 
 -- Packer
@@ -45,7 +42,7 @@ end
 packer.startup(function(use)
 	-- Setup
 	use "wbthomason/packer.nvim"
-	use "p00f/alabaster_dark.nvim"
+	use 'tjdevries/colorbuddy.vim'
 	use "nvim-treesitter/nvim-treesitter"
 	use "lewis6991/impatient.nvim"
 	use "p00f/nvim-ts-rainbow"
@@ -125,6 +122,8 @@ packer.startup(function(use)
 		require("packer").sync()
 	end
 end)
+
+require('colorbuddy').colorscheme('./alabaster')
 
 local luasnip = require 'luasnip'
 
