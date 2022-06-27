@@ -46,6 +46,8 @@ packer.startup(function(use)
 	use "nvim-treesitter/nvim-treesitter"
 	use "lewis6991/impatient.nvim"
 	use "p00f/nvim-ts-rainbow"
+	use 'nvim-treesitter/playground'
+
 
 	-- Keymapping
 	use {
@@ -190,6 +192,9 @@ require("nvim-treesitter.configs").setup {
 		enable = true,
 		extended_mode = true,
 		max_file_lines = nil
+	},
+	playground = {
+		enable = true
 	}
 }
 
