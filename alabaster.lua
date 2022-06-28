@@ -52,19 +52,32 @@ Group.new('Tag', colors.black, nil, nil)
 -- Underline
 Group.new('Underlined', colors.blue, nil, styles.underline)
 
--- Error
-Group.new('Error', colors.red, nil, styles.bold)
-
 -- Todo
 Group.new('Todo', colors.blue, nil, styles.bold)
 
+-- LSP
+Group.new('Error', colors.red, nil, styles.bold)
+Group.new('DiagnosticWarn', colors.orange, nil, styles.bold)
+Group.new('DiagnosticHint', colors.blue, nil, styles.bold)
+
 -- Editor
 Group.new("Normal", colors.black, colors.back, nil)
+Group.new('Visual', nil, colors.grey, nil)
+Group.new("StatusLine", colors.black, colors.green, nil)
 Group.new('LineNr', colors.black, colors.grey, nil)
 Group.new('Search', colors.black, colors.yellow, nil)
 Group.new('ColorColumn', colors.black, colors.grey, nil)
+Group.new('SignColumn', nil, colors.back, nil)
+Group.new('visuallinemode', colors.white, colors.blue, nil)
+
+-- Git
+Group.new('signifysignadd', colors.green, nil, nil)
+Group.new('signifysigndelete', colors.red, nil, nil)
+Group.new('signifysignchange', colors.blue, nil, nil)
 
 -- Clojure
+Group.new('clojureTSInclude', colors.black, nil, nil) -- ns
+Group.new('clojureTSNamespace', colors.black, nil, nil) -- namespace
 Group.new('clojureTSKeyword', colors.black, nil, nil) -- def var
-Group.new('clojureTSVariable', colors.blue, nil, nil) -- symbol name
+Group.new('clojureTSVariable', colors.black, nil, nil) -- symbol name
 Group.new('clojureTSSymbol', colors.purple, nil, nil) -- keyword
