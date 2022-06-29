@@ -9,6 +9,7 @@ vim.opt.termguicolors = true
 vim.opt.wrap = false
 vim.opt.colorcolumn = "80"
 vim.opt.shiftwidth = 2
+vim.opt.tabstop = 2
 
 vim.g.mapleader = " "
 vim.g.maplocalleader = ","
@@ -42,12 +43,26 @@ end
 packer.startup(function(use)
 	-- Setup
 	use "wbthomason/packer.nvim"
+	use "p00f/alabaster_dark.nvim"
+	use "grierson/alabaster.nvim"
 	use 'tjdevries/colorbuddy.vim'
 	use "nvim-treesitter/nvim-treesitter"
 	use "lewis6991/impatient.nvim"
 	use "p00f/nvim-ts-rainbow"
-	use 'nvim-treesitter/playground'
+	use {
+		'nvim-lualine/lualine.nvim',
+		requires = { 'kyazdani42/nvim-web-devicons', opt = true },
+		config = function()
+			require('lualine').setup()
+		end
+	}
 
+	-- Git
+	use { 'TimUntersberger/neogit',
+		requires = 'nvim-lua/plenary.nvim',
+		config = function()
+			require("neogit").setup()
+		end }
 
 	-- Keymapping
 	use {
@@ -125,7 +140,8 @@ packer.startup(function(use)
 	end
 end)
 
-require('colorbuddy').colorscheme('./alabaster')
+-- require('colorbuddy').colorscheme("alabaster")
+vim.cmd "colorscheme alabaster_dark"
 
 local luasnip = require 'luasnip'
 
@@ -174,6 +190,9 @@ require('lspconfig')['sumneko_lua'].setup {
 require('lspconfig')['clojure_lsp'].setup {
 	capabilities = capabilities
 }
+require('lspconfig')['tsserver'].setup {
+	capabilities = capabilities
+}
 require('lspconfig')['marksman'].setup {
 	capabilities = capabilities
 }
@@ -211,6 +230,8 @@ wk.register({
 			w = { "<cmd>Telescope grep_string<cr>", "Word" },
 			e = { "<cmd>Trouble<cr>", "Errors" }
 		},
+		g = { "<cmd>Neogit<cr>", "Git" },
+		h = { "<cmd>nohl<cr>", "No highlight" },
 		t = { "<cmd>NeoTreeFocus<cr>", "Focus tree" },
 		T = { "<cmd>NeoTreeShowToggle<cr>", "Toggle tree" },
 		l = {
@@ -221,7 +242,7 @@ wk.register({
 		},
 	},
 	["<localleader>"] = {
-		name = "+lsp",
-		f = { "<cmd>LspZeroFormat<cr>", "Format" },
+		name = "+repl",
+		r = { "<cmd>ConjureLogVSplit<cr>", "Open REPL" },
 	},
 })
