@@ -43,8 +43,8 @@ end
 packer.startup(function(use)
 	-- Setup
 	use "wbthomason/packer.nvim"
+	use "grierson/alabaster_light.nvim"
 	use "p00f/alabaster_dark.nvim"
-	use "grierson/alabaster.nvim"
 	use 'tjdevries/colorbuddy.vim'
 	use "nvim-treesitter/nvim-treesitter"
 	use "lewis6991/impatient.nvim"
@@ -54,6 +54,11 @@ packer.startup(function(use)
 		requires = { 'kyazdani42/nvim-web-devicons', opt = true },
 		config = function()
 			require('lualine').setup()
+		end
+	}
+	use { 'norcalli/nvim-colorizer.lua',
+		config = function()
+			require('colorizer').setup()
 		end
 	}
 
@@ -140,7 +145,7 @@ packer.startup(function(use)
 	end
 end)
 
--- require('colorbuddy').colorscheme("alabaster")
+-- vim.cmd "colorscheme alabaster_light"
 vim.cmd "colorscheme alabaster_dark"
 
 local luasnip = require 'luasnip'
