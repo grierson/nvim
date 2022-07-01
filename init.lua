@@ -14,6 +14,9 @@ vim.opt.tabstop = 2
 vim.g.mapleader = " "
 vim.g.maplocalleader = ","
 
+-- vim.cmd "colorscheme alabaster_light"
+vim.cmd "colorscheme alabaster_dark"
+
 require("impatient")
 
 -- Packer
@@ -43,22 +46,23 @@ end
 packer.startup(function(use)
 	-- Setup
 	use "wbthomason/packer.nvim"
+	use "lewis6991/impatient.nvim"
+
+	-- Style
 	use "grierson/alabaster_light.nvim"
 	use "p00f/alabaster_dark.nvim"
-	use 'tjdevries/colorbuddy.vim'
 	use "nvim-treesitter/nvim-treesitter"
-	use "lewis6991/impatient.nvim"
 	use "p00f/nvim-ts-rainbow"
+	use { 'norcalli/nvim-colorizer.lua',
+		config = function()
+			require('colorizer').setup()
+		end
+	}
 	use {
 		'nvim-lualine/lualine.nvim',
 		requires = { 'kyazdani42/nvim-web-devicons', opt = true },
 		config = function()
 			require('lualine').setup()
-		end
-	}
-	use { 'norcalli/nvim-colorizer.lua',
-		config = function()
-			require('colorizer').setup()
 		end
 	}
 
@@ -68,6 +72,13 @@ packer.startup(function(use)
 		config = function()
 			require("neogit").setup()
 		end }
+
+	use {
+		"lewis6991/gitsigns.nvim",
+		config = function()
+			require("gitsigns").setup {}
+		end
+	}
 
 	-- Keymapping
 	use {
@@ -112,13 +123,6 @@ packer.startup(function(use)
 		end
 	}
 
-	use {
-		"lewis6991/gitsigns.nvim",
-		config = function()
-			require("gitsigns").setup {}
-		end
-	}
-
 	-- LSP
 	use 'neovim/nvim-lspconfig'
 	use 'williamboman/nvim-lsp-installer'
@@ -144,9 +148,6 @@ packer.startup(function(use)
 		require("packer").sync()
 	end
 end)
-
--- vim.cmd "colorscheme alabaster_light"
-vim.cmd "colorscheme alabaster_dark"
 
 local luasnip = require 'luasnip'
 
@@ -188,6 +189,7 @@ cmp.setup {
 	},
 }
 
+-- LSP + Complete
 local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
 require('lspconfig')['sumneko_lua'].setup {
 	capabilities = capabilities
@@ -216,9 +218,6 @@ require("nvim-treesitter.configs").setup {
 		enable = true,
 		extended_mode = true,
 		max_file_lines = nil
-	},
-	playground = {
-		enable = true
 	}
 }
 
