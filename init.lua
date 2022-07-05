@@ -53,11 +53,6 @@ packer.startup(function(use)
 	use "p00f/alabaster_dark.nvim"
 	use "nvim-treesitter/nvim-treesitter"
 	use "p00f/nvim-ts-rainbow"
-	use { 'norcalli/nvim-colorizer.lua',
-		config = function()
-			require('colorizer').setup()
-		end
-	}
 	use {
 		'nvim-lualine/lualine.nvim',
 		requires = { 'kyazdani42/nvim-web-devicons', opt = true },
@@ -102,6 +97,11 @@ packer.startup(function(use)
 			require("nvim-autopairs").setup {}
 		end
 	}
+	use { 'norcalli/nvim-colorizer.lua',
+		config = function()
+			require('colorizer').setup()
+		end
+	}
 
 	-- IDE
 	use {
@@ -123,7 +123,7 @@ packer.startup(function(use)
 		end
 	}
 
-	-- LSP
+	-- LSP + Autocomplete
 	use 'neovim/nvim-lspconfig'
 	use 'williamboman/nvim-lsp-installer'
 
@@ -149,8 +149,8 @@ packer.startup(function(use)
 	end
 end)
 
+-- Autocomplete
 local luasnip = require 'luasnip'
-
 local cmp = require 'cmp'
 cmp.setup {
 	snippet = {
@@ -191,19 +191,42 @@ cmp.setup {
 
 -- LSP + Complete
 local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+
+-- Docs
+require('lspconfig')['marksman'].setup {
+	capabilities = capabilities
+}
+
+-- Lang
 require('lspconfig')['sumneko_lua'].setup {
 	capabilities = capabilities
 }
 require('lspconfig')['clojure_lsp'].setup {
 	capabilities = capabilities
 }
+
+-- WEB
 require('lspconfig')['tsserver'].setup {
 	capabilities = capabilities
 }
-require('lspconfig')['marksman'].setup {
+require('lspconfig')['html'].setup {
 	capabilities = capabilities
 }
+require('lspconfig')['tailwindcss'].setup {
+	capabilities = capabilities
+}
+
+-- DEVOPS
 require('lspconfig')['tflint'].setup {
+	capabilities = capabilities
+}
+require('lspconfig')['yamlls'].setup {
+	capabilities = capabilities
+}
+require('lspconfig')['dockerls'].setup {
+	capabilities = capabilities
+}
+require('lspconfig')['bashls'].setup {
 	capabilities = capabilities
 }
 
