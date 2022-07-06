@@ -71,7 +71,7 @@ packer.startup(function(use)
 	use {
 		"lewis6991/gitsigns.nvim",
 		config = function()
-			require("gitsigns").setup {}
+			require("gitsigns").setup()
 		end
 	}
 
@@ -79,12 +79,18 @@ packer.startup(function(use)
 	use {
 		"folke/which-key.nvim",
 		config = function()
-			require("which-key").setup {}
+			require("which-key").setup()
 		end
 	}
 
 	-- Editing
-	use "tpope/vim-surround"
+	use({
+		"kylechui/nvim-surround",
+		config = function()
+			require("nvim-surround").setup()
+		end
+	})
+
 	use {
 		"numToStr/Comment.nvim",
 		config = function()
@@ -94,7 +100,7 @@ packer.startup(function(use)
 	use {
 		"windwp/nvim-autopairs",
 		config = function()
-			require("nvim-autopairs").setup {}
+			require("nvim-autopairs").setup()
 		end
 	}
 	use { 'norcalli/nvim-colorizer.lua',
@@ -119,7 +125,7 @@ packer.startup(function(use)
 			"MunifTanjim/nui.nvim",
 		},
 		config = function()
-			require("neo-tree").setup {}
+			require("neo-tree").setup()
 		end
 	}
 
