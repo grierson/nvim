@@ -209,6 +209,12 @@ require('lspconfig')['clojure_lsp'].setup {
 require('lspconfig')['tsserver'].setup {
 	capabilities = capabilities
 }
+require('lspconfig')['denols'].setup {
+	capabilities = capabilities
+}
+require('lspconfig')['eslint'].setup {
+	capabilities = capabilities
+}
 require('lspconfig')['html'].setup {
 	capabilities = capabilities
 }
@@ -217,6 +223,9 @@ require('lspconfig')['tailwindcss'].setup {
 }
 
 -- DEVOPS
+require('lspconfig')['terraformls'].setup {
+	capabilities = capabilities
+}
 require('lspconfig')['tflint'].setup {
 	capabilities = capabilities
 }
