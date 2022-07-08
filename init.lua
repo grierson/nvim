@@ -140,6 +140,13 @@ packer.startup(function(use)
 	use 'saadparwaiz1/cmp_luasnip'
 	use 'L3MON4D3/LuaSnip'
 	use 'stevearc/dressing.nvim'
+	use {
+		"folke/trouble.nvim",
+		requires = "kyazdani42/nvim-web-devicons",
+		config = function()
+			require("trouble").setup {}
+		end
+	}
 
 	-- Clojure
 	use "Olical/conjure"
