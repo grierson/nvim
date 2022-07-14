@@ -10,6 +10,8 @@ vim.opt.wrap = false
 vim.opt.colorcolumn = "80"
 vim.opt.shiftwidth = 2
 vim.opt.tabstop = 2
+vim.opt.spell = true
+vim.opt.spelllang = { 'en_gb' }
 
 vim.g.mapleader = " "
 vim.g.maplocalleader = ","
@@ -128,6 +130,16 @@ packer.startup(function(use)
 			require("neo-tree").setup()
 		end
 	}
+
+	-- Markdown
+	-- install without yarn or npm
+	use({
+		"iamcco/markdown-preview.nvim",
+		run = function() vim.fn["mkdp#util#install"]() end,
+	})
+
+	use({ "iamcco/markdown-preview.nvim", run = "cd app && npm install",
+		setup = function() vim.g.mkdp_filetypes = { "markdown" } end, ft = { "markdown" }, })
 
 	-- LSP + Autocomplete
 	use 'neovim/nvim-lspconfig'
@@ -277,6 +289,8 @@ wk.register({
 			h = { "<cmd>Telescope help_tags<cr>", "Help" },
 			g = { "<cmd>Telescope live_grep<cr>", "Grep" },
 			w = { "<cmd>Telescope grep_string<cr>", "Word" },
+			r = { "<cmd>Telescope registers<cr>", "Registers" },
+			s = { "<cmd>Telescope spell_suggest<cr>", "Spelling" },
 			e = { "<cmd>Trouble<cr>", "Errors" }
 		},
 		g = { "<cmd>Neogit<cr>", "Git" },
