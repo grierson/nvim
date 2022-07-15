@@ -15,24 +15,24 @@ vim.g.mapleader = " "
 vim.g.maplocalleader = ","
 
 -- vim.cmd "colorscheme alabaster_light"
-vim.cmd "colorscheme alabaster_dark"
+vim.cmd("colorscheme alabaster_dark")
 
 -- Packer
 local fn = vim.fn
 
 -- Automatically install packer
-local install_path = fn.stdpath "data" .. "/site/pack/packer/start/packer.nvim"
+local install_path = fn.stdpath("data") .. "/site/pack/packer/start/packer.nvim"
 if fn.empty(fn.glob(install_path)) > 0 then
-	PACKER_BOOTSTRAP = fn.system {
+	PACKER_BOOTSTRAP = fn.system({
 		"git",
 		"clone",
 		"--depth",
 		"1",
 		"https://github.com/wbthomason/packer.nvim",
 		install_path,
-	}
-	print "Installing packer close and reopen Neovim..."
-	vim.cmd [[packadd packer.nvim]]
+	})
+	print("Installing packer close and reopen Neovim...")
+	vim.cmd([[packadd packer.nvim]])
 end
 
 -- Use a protected call so we don't error out on first use
@@ -43,39 +43,40 @@ end
 
 packer.startup(function(use)
 	-- Setup
-	use "wbthomason/packer.nvim" -- Package manager
-	use 'echasnovski/mini.nvim' -- Lots
-	use "chentoast/marks.nvim" -- List marks
+	use("wbthomason/packer.nvim") -- Package manager
+	use("echasnovski/mini.nvim") -- Lots
+	use("chentoast/marks.nvim") -- List marks
 
 	-- Style
-	use "grierson/alabaster_light.nvim" -- Light theme
-	use "p00f/alabaster_dark.nvim" -- Dark theme
-	use "nvim-treesitter/nvim-treesitter" -- Better highlighting
-	use "p00f/nvim-ts-rainbow" -- Rainbow parens
+	use("grierson/alabaster_light.nvim") -- Light theme
+	use("p00f/alabaster_dark.nvim") -- Dark theme
+	use("nvim-treesitter/nvim-treesitter") -- Better highlighting
+	use("p00f/nvim-ts-rainbow") -- Rainbow parens
 
 	-- Keymapping
-	use {
+	use({
 		"folke/which-key.nvim", -- Show keymaps
 		config = function()
 			require("which-key").setup()
-		end
-	}
+		end,
+	})
 
-	use { 'norcalli/nvim-colorizer.lua', -- Show hex color
+	use({
+		"norcalli/nvim-colorizer.lua", -- Show hex color
 		config = function()
-			require('colorizer').setup()
-		end
-	}
+			require("colorizer").setup()
+		end,
+	})
 
 	-- IDE
-	use {
+	use({
 		"nvim-telescope/telescope.nvim", -- Search
 		requires = {
-			"nvim-lua/plenary.nvim"
-		}
-	}
+			"nvim-lua/plenary.nvim",
+		},
+	})
 
-	use {
+	use({
 		"nvim-neo-tree/neo-tree.nvim", -- Project tree
 		requires = {
 			"nvim-lua/plenary.nvim",
@@ -84,70 +85,71 @@ packer.startup(function(use)
 		},
 		config = function()
 			require("neo-tree").setup()
-		end
-	}
+		end,
+	})
 
 	-- Git
-	use {
-		'TimUntersberger/neogit', -- Git changes
-		requires = 'nvim-lua/plenary.nvim',
+	use({
+		"TimUntersberger/neogit", -- Git changes
+		requires = "nvim-lua/plenary.nvim",
 		config = function()
 			require("neogit").setup()
-		end
-	}
+		end,
+	})
 
-	use {
+	use({
 		"lewis6991/gitsigns.nvim", -- List Git changes
 		config = function()
 			require("gitsigns").setup()
-		end
-	}
+		end,
+	})
 
-	use {
-		'sindrets/diffview.nvim',  -- Git diff
-		requires = 'nvim-lua/plenary.nvim'
-	}
+	use({
+		"sindrets/diffview.nvim", -- Git diff
+		requires = "nvim-lua/plenary.nvim",
+	})
 
 	-- Markdown
 	-- install without yarn or npm
-	use {
+	use({
 		"iamcco/markdown-preview.nvim",
 		run = function()
 			vim.fn["mkdp#util#install"]()
-		end
-	}
+		end,
+	})
 
-	use { "iamcco/markdown-preview.nvim",
+	use({
+		"iamcco/markdown-preview.nvim",
 		run = "cd app && npm install",
 		setup = function()
 			vim.g.mkdp_filetypes = { "markdown" }
 		end,
-		ft = { "markdown" }
-	}
+		ft = { "markdown" },
+	})
 
 	-- LSP + Autocomplete
-	use 'neovim/nvim-lspconfig'
-	use 'williamboman/nvim-lsp-installer'
+	use("neovim/nvim-lspconfig")
+	use("williamboman/nvim-lsp-installer")
 
-	use 'hrsh7th/nvim-cmp'
-	use 'hrsh7th/cmp-nvim-lsp'
-	use 'hrsh7th/cmp-buffer'
+	use("hrsh7th/nvim-cmp")
+	use("hrsh7th/cmp-nvim-lsp")
+	use("hrsh7th/cmp-buffer")
 
-	use 'saadparwaiz1/cmp_luasnip'
-	use 'L3MON4D3/LuaSnip'
-	use 'stevearc/dressing.nvim'
-	use {
+	use("saadparwaiz1/cmp_luasnip")
+	use("L3MON4D3/LuaSnip")
+	use("stevearc/dressing.nvim")
+	use({
 		"folke/trouble.nvim",
-		requires = "kyazdani42/nvim-web-devicons"
-	}
+		requires = "kyazdani42/nvim-web-devicons",
+	})
 
 	-- Clojure
-	use "Olical/conjure"
-	use "clojure-vim/vim-jack-in"
-	use "tpope/vim-dispatch"
-	use "radenling/vim-dispatch-neovim"
-	use "guns/vim-sexp"
-	use "tpope/vim-sexp-mappings-for-regular-people"
+	use("Olical/conjure")
+	use("clojure-vim/vim-jack-in")
+	use("tpope/vim-dispatch")
+	use("radenling/vim-dispatch-neovim")
+	use("guns/vim-sexp")
+	use("tpope/vim-sexp-mappings-for-regular-people")
 
 	-- Put this at the end after all plugins
 	if PACKER_BOOTSTRAP then
@@ -156,20 +158,20 @@ packer.startup(function(use)
 end)
 
 -- Autocomplete
-local luasnip = require 'luasnip'
-local cmp = require 'cmp'
-cmp.setup {
+local luasnip = require("luasnip")
+local cmp = require("cmp")
+cmp.setup({
 	snippet = {
 		expand = function(args)
 			luasnip.lsp_expand(args.body)
 		end,
 	},
 	mapping = cmp.mapping.preset.insert({
-		['<CR>'] = cmp.mapping.confirm {
+		["<CR>"] = cmp.mapping.confirm({
 			behavior = cmp.ConfirmBehavior.Replace,
 			select = true,
-		},
-		['<Tab>'] = cmp.mapping(function(fallback)
+		}),
+		["<Tab>"] = cmp.mapping(function(fallback)
 			if cmp.visible() then
 				cmp.select_next_item()
 			elseif luasnip.expand_or_jumpable() then
@@ -177,8 +179,8 @@ cmp.setup {
 			else
 				fallback()
 			end
-		end, { 'i', 's' }),
-		['<S-Tab>'] = cmp.mapping(function(fallback)
+		end, { "i", "s" }),
+		["<S-Tab>"] = cmp.mapping(function(fallback)
 			if cmp.visible() then
 				cmp.select_prev_item()
 			elseif luasnip.jumpable(-1) then
@@ -186,84 +188,59 @@ cmp.setup {
 			else
 				fallback()
 			end
-		end, { 'i', 's' }),
+		end, { "i", "s" }),
 	}),
 	sources = {
-		{ name = 'nvim_lsp' },
-		{ name = 'luasnip' },
-		{ name = 'buffer' },
+		{ name = "nvim_lsp" },
+		{ name = "luasnip" },
+		{ name = "buffer" },
 	},
-}
+})
 
 -- LSP + Complete
-local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+local capabilities = require("cmp_nvim_lsp").update_capabilities(vim.lsp.protocol.make_client_capabilities())
 
--- Docs
-require('lspconfig')['marksman'].setup {
-	capabilities = capabilities
-}
-
--- Lang
-require('lspconfig')['sumneko_lua'].setup {
-	capabilities = capabilities
-}
-require('lspconfig')['clojure_lsp'].setup {
-	capabilities = capabilities
-}
-
--- WEB
-require('lspconfig')['tsserver'].setup {
-	capabilities = capabilities
-}
-require('lspconfig')['denols'].setup {
-	capabilities = capabilities
-}
-require('lspconfig')['eslint'].setup {
-	capabilities = capabilities
-}
-require('lspconfig')['html'].setup {
-	capabilities = capabilities
-}
-require('lspconfig')['tailwindcss'].setup {
-	capabilities = capabilities
+local servers = {
+	"sumneko_lua",
+	"clojure_lsp",
+	"tsserver",
+	"eslint",
+	"html",
+	"tailwindcss",
+	"marksman",
+	"terraformls",
+	"tflint",
+	"yamlls",
+	"dockerls",
+	"bashls",
 }
 
--- DEVOPS
-require('lspconfig')['terraformls'].setup {
-	capabilities = capabilities
-}
-require('lspconfig')['tflint'].setup {
-	capabilities = capabilities
-}
-require('lspconfig')['yamlls'].setup {
-	capabilities = capabilities
-}
-require('lspconfig')['dockerls'].setup {
-	capabilities = capabilities
-}
-require('lspconfig')['bashls'].setup {
-	capabilities = capabilities
-}
+for _, lsp in ipairs(servers) do
+	require("lspconfig")[lsp].setup({
+		capabilities = capabilities,
+	})
+end
 
-require("nvim-treesitter.configs").setup {
+require("nvim-treesitter.configs").setup({
 	highlight = {
-		enable = true
+		enable = true,
 	},
 	indent = {
-		enable = true
+		enable = true,
 	},
 	rainbow = {
 		enable = true,
 		extended_mode = true,
-		max_file_lines = nil
-	}
-}
+		max_file_lines = nil,
+	},
+})
 
-require("marks").setup {}
-require("mini.comment").setup {}
-require("mini.pairs").setup {}
-require("mini.surround").setup {}
-require("mini.statusline").setup {}
+require("marks").setup({})
+require("mini.comment").setup({})
+require("mini.pairs").setup({})
+require("mini.surround").setup({})
+require("mini.statusline").setup({})
+require("mini.test").setup({})
 
 local wk = require("which-key")
 wk.register({
@@ -278,7 +255,7 @@ wk.register({
 			w = { "<cmd>Telescope grep_string<cr>", "Word" },
 			r = { "<cmd>Telescope registers<cr>", "Registers" },
 			s = { "<cmd>Telescope spell_suggest<cr>", "Spelling" },
-			e = { "<cmd>Trouble<cr>", "Errors" }
+			e = { "<cmd>Trouble<cr>", "Errors" },
 		},
 		g = {
 			name = "+git",
@@ -298,5 +275,10 @@ wk.register({
 	["<localleader>"] = {
 		name = "+repl",
 		r = { "<cmd>ConjureLogVSplit<cr>", "Open REPL" },
+		t = {
+			name = "+test",
+			f = { "<cmd>lua MiniTest.run_file()<cr>", "file" },
+			t = { "<cmd>lua MiniTest.run_at_location()<cr>", "run test" },
+		},
 	},
 })
