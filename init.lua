@@ -10,8 +10,6 @@ vim.opt.wrap = false
 vim.opt.colorcolumn = "80"
 vim.opt.shiftwidth = 2
 vim.opt.tabstop = 2
-vim.opt.spell = true
-vim.opt.spelllang = { 'en_gb' }
 
 vim.g.mapleader = " "
 vim.g.maplocalleader = ","
@@ -47,39 +45,37 @@ end
 
 packer.startup(function(use)
 	-- Setup
-	use "wbthomason/packer.nvim"
-	use "lewis6991/impatient.nvim"
+	use "wbthomason/packer.nvim" -- Package manager
+	use "lewis6991/impatient.nvim" -- Faster startup
+
+	-- Gutter
+	use {
+		"chentoast/marks.nvim" -- List marks
+	}
+
+	use {
+		"lewis6991/gitsigns.nvim", -- List Git changes
+		config = function()
+			require("gitsigns").setup()
+		end
+	}
 
 	-- Style
-	use "grierson/alabaster_light.nvim"
-	use "p00f/alabaster_dark.nvim"
-	use "nvim-treesitter/nvim-treesitter"
-	use "p00f/nvim-ts-rainbow"
+	use "grierson/alabaster_light.nvim" -- Light theme
+	use "p00f/alabaster_dark.nvim" -- Dark theme
+	use "nvim-treesitter/nvim-treesitter" -- Better highlighting
+	use "p00f/nvim-ts-rainbow" -- Rainbow parens
 	use {
-		'nvim-lualine/lualine.nvim',
+		'nvim-lualine/lualine.nvim', -- Fancy status bar
 		requires = { 'kyazdani42/nvim-web-devicons', opt = true },
 		config = function()
 			require('lualine').setup()
 		end
 	}
 
-	-- Git
-	use { 'TimUntersberger/neogit',
-		requires = 'nvim-lua/plenary.nvim',
-		config = function()
-			require("neogit").setup()
-		end }
-
-	use {
-		"lewis6991/gitsigns.nvim",
-		config = function()
-			require("gitsigns").setup()
-		end
-	}
-
 	-- Keymapping
 	use {
-		"folke/which-key.nvim",
+		"folke/which-key.nvim", -- Show keymaps
 		config = function()
 			require("which-key").setup()
 		end
@@ -87,25 +83,27 @@ packer.startup(function(use)
 
 	-- Editing
 	use({
-		"kylechui/nvim-surround",
+		"kylechui/nvim-surround", -- Change surround
 		config = function()
 			require("nvim-surround").setup()
 		end
 	})
 
 	use {
-		"numToStr/Comment.nvim",
-		config = function()
-			require("Comment").setup()
-		end
-	}
-	use {
-		"windwp/nvim-autopairs",
+		"windwp/nvim-autopairs", -- Auto surround
 		config = function()
 			require("nvim-autopairs").setup()
 		end
 	}
-	use { 'norcalli/nvim-colorizer.lua',
+
+	use {
+		"numToStr/Comment.nvim", -- Comment
+		config = function()
+			require("Comment").setup()
+		end
+	}
+
+	use { 'norcalli/nvim-colorizer.lua', -- Show hex color
 		config = function()
 			require('colorizer').setup()
 		end
@@ -113,14 +111,14 @@ packer.startup(function(use)
 
 	-- IDE
 	use {
-		"nvim-telescope/telescope.nvim",
+		"nvim-telescope/telescope.nvim", -- Search
 		requires = {
 			"nvim-lua/plenary.nvim"
 		}
 	}
 
 	use {
-		"nvim-neo-tree/neo-tree.nvim",
+		"nvim-neo-tree/neo-tree.nvim", -- Project tree
 		requires = {
 			"nvim-lua/plenary.nvim",
 			"kyazdani42/nvim-web-devicons",
@@ -131,15 +129,30 @@ packer.startup(function(use)
 		end
 	}
 
+	use {
+		'TimUntersberger/neogit', -- Git changes
+		requires = 'nvim-lua/plenary.nvim',
+		config = function()
+			require("neogit").setup()
+		end
+	}
+
 	-- Markdown
 	-- install without yarn or npm
-	use({
+	use {
 		"iamcco/markdown-preview.nvim",
-		run = function() vim.fn["mkdp#util#install"]() end,
-	})
+		run = function()
+			vim.fn["mkdp#util#install"]()
+		end
+	}
 
-	use({ "iamcco/markdown-preview.nvim", run = "cd app && npm install",
-		setup = function() vim.g.mkdp_filetypes = { "markdown" } end, ft = { "markdown" }, })
+	use { "iamcco/markdown-preview.nvim",
+		run = "cd app && npm install",
+		setup = function()
+			vim.g.mkdp_filetypes = { "markdown" }
+		end,
+		ft = { "markdown" }
+	}
 
 	-- LSP + Autocomplete
 	use 'neovim/nvim-lspconfig'
@@ -154,10 +167,7 @@ packer.startup(function(use)
 	use 'stevearc/dressing.nvim'
 	use {
 		"folke/trouble.nvim",
-		requires = "kyazdani42/nvim-web-devicons",
-		config = function()
-			require("trouble").setup {}
-		end
+		requires = "kyazdani42/nvim-web-devicons"
 	}
 
 	-- Clojure
@@ -277,6 +287,9 @@ require("nvim-treesitter.configs").setup {
 		max_file_lines = nil
 	}
 }
+
+require("marks").setup {}
+require("trouble").setup {}
 
 local wk = require("which-key")
 wk.register({
