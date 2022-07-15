@@ -17,8 +17,6 @@ vim.g.maplocalleader = ","
 -- vim.cmd "colorscheme alabaster_light"
 vim.cmd "colorscheme alabaster_dark"
 
-require("impatient")
-
 -- Packer
 local fn = vim.fn
 
@@ -46,60 +44,20 @@ end
 packer.startup(function(use)
 	-- Setup
 	use "wbthomason/packer.nvim" -- Package manager
-	use "lewis6991/impatient.nvim" -- Faster startup
-
-	-- Gutter
-	use {
-		"chentoast/marks.nvim" -- List marks
-	}
-
-	use {
-		"lewis6991/gitsigns.nvim", -- List Git changes
-		config = function()
-			require("gitsigns").setup()
-		end
-	}
+	use 'echasnovski/mini.nvim' -- Lots
+	use "chentoast/marks.nvim" -- List marks
 
 	-- Style
 	use "grierson/alabaster_light.nvim" -- Light theme
 	use "p00f/alabaster_dark.nvim" -- Dark theme
 	use "nvim-treesitter/nvim-treesitter" -- Better highlighting
 	use "p00f/nvim-ts-rainbow" -- Rainbow parens
-	use {
-		'nvim-lualine/lualine.nvim', -- Fancy status bar
-		requires = { 'kyazdani42/nvim-web-devicons', opt = true },
-		config = function()
-			require('lualine').setup()
-		end
-	}
 
 	-- Keymapping
 	use {
 		"folke/which-key.nvim", -- Show keymaps
 		config = function()
 			require("which-key").setup()
-		end
-	}
-
-	-- Editing
-	use({
-		"kylechui/nvim-surround", -- Change surround
-		config = function()
-			require("nvim-surround").setup()
-		end
-	})
-
-	use {
-		"windwp/nvim-autopairs", -- Auto surround
-		config = function()
-			require("nvim-autopairs").setup()
-		end
-	}
-
-	use {
-		"numToStr/Comment.nvim", -- Comment
-		config = function()
-			require("Comment").setup()
 		end
 	}
 
@@ -129,12 +87,25 @@ packer.startup(function(use)
 		end
 	}
 
+	-- Git
 	use {
 		'TimUntersberger/neogit', -- Git changes
 		requires = 'nvim-lua/plenary.nvim',
 		config = function()
 			require("neogit").setup()
 		end
+	}
+
+	use {
+		"lewis6991/gitsigns.nvim", -- List Git changes
+		config = function()
+			require("gitsigns").setup()
+		end
+	}
+
+	use {
+		'sindrets/diffview.nvim',  -- Git diff
+		requires = 'nvim-lua/plenary.nvim'
 	}
 
 	-- Markdown
@@ -289,7 +260,10 @@ require("nvim-treesitter.configs").setup {
 }
 
 require("marks").setup {}
-require("trouble").setup {}
+require("mini.comment").setup {}
+require("mini.pairs").setup {}
+require("mini.surround").setup {}
+require("mini.statusline").setup {}
 
 local wk = require("which-key")
 wk.register({
@@ -306,7 +280,11 @@ wk.register({
 			s = { "<cmd>Telescope spell_suggest<cr>", "Spelling" },
 			e = { "<cmd>Trouble<cr>", "Errors" }
 		},
-		g = { "<cmd>Neogit<cr>", "Git" },
+		g = {
+			name = "+git",
+			s = { "<cmd>Neogit<cr>", "Status" },
+			d = { "<cmd>DiffviewOpen<cr>", "Diff" },
+		},
 		h = { "<cmd>nohl<cr>", "No highlight" },
 		t = { "<cmd>NeoTreeFocus<cr>", "Focus tree" },
 		T = { "<cmd>NeoTreeShowToggle<cr>", "Toggle tree" },
