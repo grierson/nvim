@@ -142,6 +142,7 @@ packer.startup(function(use)
 		"folke/trouble.nvim",
 		requires = "kyazdani42/nvim-web-devicons",
 	})
+	use("jose-elias-alvarez/null-ls.nvim")
 
 	-- Clojure
 	use("Olical/conjure")
@@ -197,6 +198,12 @@ cmp.setup({
 	},
 })
 
+require("null-ls").setup({
+	sources = {
+		require("null-ls").builtins.formatting.stylua,
+	},
+})
+
 -- LSP + Complete
 local capabilities = require("cmp_nvim_lsp").update_capabilities(vim.lsp.protocol.make_client_capabilities())
 
@@ -218,6 +225,10 @@ local servers = {
 for _, lsp in ipairs(servers) do
 	require("lspconfig")[lsp].setup({
 		capabilities = capabilities,
+		on_attach = function(client, _)
+			client.resolved_capabilities.document_formatting = false
+			client.resolved_capabilities.document_range_formatting = false
+		end,
 	})
 end
 
