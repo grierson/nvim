@@ -1,5 +1,3 @@
--- :help options
-
 vim.opt.number = true
 vim.opt.relativenumber = true
 vim.opt.ignorecase = true
@@ -10,12 +8,14 @@ vim.opt.wrap = false
 vim.opt.colorcolumn = "80"
 vim.opt.shiftwidth = 2
 vim.opt.tabstop = 2
+vim.o.signcolumn = "yes"
 
 vim.g.mapleader = " "
 vim.g.maplocalleader = ","
 
 -- vim.cmd "colorscheme alabaster_light"
-vim.cmd("colorscheme alabaster_dark")
+vim.cmd("colorscheme alabaster_light")
+vim.cmd("set noswapfile")
 
 -- Packer
 local fn = vim.fn
@@ -45,13 +45,19 @@ packer.startup(function(use)
 	-- Setup
 	use("wbthomason/packer.nvim") -- Package manager
 	use("echasnovski/mini.nvim") -- Lots
+	use("nvim-lua/plenary.nvim") -- Lots
 	use("chentoast/marks.nvim") -- List marks
 
 	-- Style
-	use("grierson/alabaster_light.nvim") -- Light theme
+	use("rktjmp/lush.nvim")
+	use("grierson/alabaster_light.nvim")
 	use("p00f/alabaster_dark.nvim") -- Dark theme
 	use("nvim-treesitter/nvim-treesitter") -- Better highlighting
 	use("p00f/nvim-ts-rainbow") -- Rainbow parens
+	use({
+		"nvim-lualine/lualine.nvim",
+		requires = { "kyazdani42/nvim-web-devicons", opt = true },
+	})
 
 	-- Keymapping
 	use({
@@ -110,14 +116,6 @@ packer.startup(function(use)
 	})
 
 	-- Markdown
-	-- install without yarn or npm
-	use({
-		"iamcco/markdown-preview.nvim",
-		run = function()
-			vim.fn["mkdp#util#install"]()
-		end,
-	})
-
 	use({
 		"iamcco/markdown-preview.nvim",
 		run = "cd app && npm install",
@@ -142,9 +140,9 @@ packer.startup(function(use)
 		"folke/trouble.nvim",
 		requires = "kyazdani42/nvim-web-devicons",
 	})
-	use("jose-elias-alvarez/null-ls.nvim")
 
 	-- Clojure
+	use("Olical/aniseed")
 	use("Olical/conjure")
 	use("clojure-vim/vim-jack-in")
 	use("tpope/vim-dispatch")
@@ -198,12 +196,6 @@ cmp.setup({
 	},
 })
 
-require("null-ls").setup({
-	sources = {
-		require("null-ls").builtins.formatting.stylua,
-	},
-})
-
 -- LSP + Complete
 local capabilities = require("cmp_nvim_lsp").update_capabilities(vim.lsp.protocol.make_client_capabilities())
 
@@ -224,11 +216,7 @@ local servers = {
 
 for _, lsp in ipairs(servers) do
 	require("lspconfig")[lsp].setup({
-		capabilities = capabilities,
-		on_attach = function(client, _)
-			client.resolved_capabilities.document_formatting = false
-			client.resolved_capabilities.document_range_formatting = false
-		end,
+		capabilities = capabilities
 	})
 end
 
@@ -246,11 +234,15 @@ require("nvim-treesitter.configs").setup({
 	},
 })
 
+require('lualine').setup({
+	options = {
+		theme = 'onelight'
+	}
+})
 require("marks").setup({})
 require("mini.comment").setup({})
 require("mini.pairs").setup({})
 require("mini.surround").setup({})
-require("mini.statusline").setup({})
 require("mini.test").setup({})
 
 local wk = require("which-key")
@@ -288,8 +280,7 @@ wk.register({
 		r = { "<cmd>ConjureLogVSplit<cr>", "Open REPL" },
 		t = {
 			name = "+test",
-			f = { "<cmd>lua MiniTest.run_file()<cr>", "file" },
-			t = { "<cmd>lua MiniTest.run_at_location()<cr>", "run test" },
+			f = { "<cmd>PlenaryBustedDirectory .<cr>", "run test" },
 		},
 	},
 })
