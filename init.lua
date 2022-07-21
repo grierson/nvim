@@ -14,7 +14,7 @@ vim.g.mapleader = " "
 vim.g.maplocalleader = ","
 
 -- vim.cmd "colorscheme alabaster_light"
-vim.cmd("colorscheme alabaster_light")
+vim.cmd("colorscheme alabaster_dark")
 vim.cmd("set noswapfile")
 
 -- Packer
@@ -50,7 +50,6 @@ packer.startup(function(use)
 
 	-- Style
 	use("rktjmp/lush.nvim")
-	use("grierson/alabaster_light.nvim")
 	use("p00f/alabaster_dark.nvim") -- Dark theme
 	use("nvim-treesitter/nvim-treesitter") -- Better highlighting
 	use("p00f/nvim-ts-rainbow") -- Rainbow parens
@@ -236,7 +235,17 @@ require("nvim-treesitter.configs").setup({
 
 require('lualine').setup({
 	options = {
-		theme = 'onelight'
+		theme = 'codedark',
+		component_separators = { left = '', right = '' },
+		section_separators = { left = '', right = '' },
+	},
+	sections = {
+		lualine_a = { 'mode' },
+		lualine_b = { 'branch', 'diff', 'diagnostics' },
+		lualine_c = { 'filename' },
+		lualine_x = { 'filetype' },
+		lualine_y = { 'progress' },
+		lualine_z = { 'location' }
 	}
 })
 require("marks").setup({})
